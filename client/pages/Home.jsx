@@ -3,7 +3,7 @@ import Main from "../components/Main";
 
 const Home = () => {
   return (
-    <div className="flex">
+    <div className="flex gap-8">
       <Sidebar />
       <Main />
     </div>
