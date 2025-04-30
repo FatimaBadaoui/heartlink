@@ -1,5 +1,6 @@
 import { BiMessageSquareAdd } from "react-icons/bi";
 import { FaHeart, FaUserFriends, FaUserEdit } from "react-icons/fa";
+import { Link } from "react-router";
 
 const Sidebar = () => {
   return (
@@ -30,22 +31,34 @@ const Sidebar = () => {
       </div>
       {/* MENU */}
       <div className="flex flex-col gap-2 p-4 w-full h-fit border-b-2 border-gray-200">
-        <div className="flex items-center gap-4 w-full px-4 py-2 cursor-pointer hover:bg-[#ffffff3c] rounded-md">
+        <Link
+          to="/create-post"
+          className="flex items-center gap-4 w-full px-4 py-2 cursor-pointer hover:bg-[#ffffff3c] rounded-md"
+        >
           <BiMessageSquareAdd className="text-2xl text-gray-300" />
           <p className="">Create Post</p>
-        </div>
-        <div className="flex items-center gap-4 w-full px-4 py-2 cursor-pointer hover:bg-[#ffffff3c] rounded-md">
+        </Link>
+        <Link
+          to="liked-posts"
+          className="flex items-center gap-4 w-full px-4 py-2 cursor-pointer hover:bg-[#ffffff3c] rounded-md"
+        >
           <FaHeart className="text-2xl text-gray-300" />
           <p className="">Posts Liked</p>
-        </div>
-        <div className="flex items-center gap-4 w-full px-4 py-2 cursor-pointer hover:bg-[#ffffff3c] rounded-md">
+        </Link>
+        <Link
+          to="friends"
+          className="flex items-center gap-4 w-full px-4 py-2 cursor-pointer hover:bg-[#ffffff3c] rounded-md"
+        >
           <FaUserFriends className="text-2xl text-gray-300" />
           <p className="">My Friends</p>
-        </div>
-        <div className="flex items-center gap-4 w-full px-4 py-2 cursor-pointer hover:bg-[#ffffff3c] rounded-md mb-4">
+        </Link>
+        <Link
+          to="edit-user"
+          className="flex items-center gap-4 w-full px-4 py-2 cursor-pointer hover:bg-[#ffffff3c] rounded-md mb-4"
+        >
           <FaUserEdit className="text-2xl text-gray-300" />
           <p className="">Edit Profile</p>
-        </div>
+        </Link>
       </div>
       {/* SUGGESTIONS */}
       <div className="flex flex-col gap-2 p-4 w-full">
