@@ -2,7 +2,7 @@ import React from 'react'
 
 const Sidebar = () => {
   return (
-    <div>Sidebar</div>
+    <div className='hidden md:flex w-[250px]'>Sidebar</div>
   )
 }
 
