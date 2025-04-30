@@ -1,9 +1,16 @@
+import Layout from "../components/Layout.jsx";
 import "./App.css";
+import { Route, Routes } from "react-router";
 
 function App() {
   return (
     <>
-      <h1 className="text-7xl text-blue-400">Hello There</h1>
+      <Routes>
+        <Route path="/" element={<Layout />} />
+{/*         <Route path="/addpost" element={<Addpost />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/user/:id" element={<UserProfile />} /> */}
+      </Routes>
     </>
   );
 }
