@@ -2,6 +2,8 @@ import "./App.css";
 import { Route, Routes } from "react-router";
 import Layout from "../components/Layout";
 import Home from "../pages/Home";
+import AddPost from "../pages/Addpost.jsx";
+
 
 function App() {
   return (
@@ -9,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="/create-post" element={<AddPost />} />
         </Route>
         {/*         <Route path="/addpost" element={<Addpost />} />
         <Route path="/profile" element={<Profile />} />

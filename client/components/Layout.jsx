@@ -1,12 +1,14 @@
 import { Outlet } from "react-router";
 import Navbar from "./Navbar";
 import BottomBar from "./BottomBar.jsx";
+import Sidebar from "./Sidebar.jsx";
 
 const Layout = () => {
   return (
     <div className="w-full lg:w-[1200px] mx-auto bg-[#1a1a1a]">
       <Navbar />
-      <main className="py-10 px-6">
+      <main className="py-10 px-6 flex gap-8">
+        <Sidebar />
         <Outlet />
       </main>
       <BottomBar />

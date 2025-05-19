@@ -4,7 +4,7 @@ import { Link } from "react-router";
 
 const Navbar = () => {
   return (
-    <div className="w-full flex items-center justify-between px-8 pt-2 sticky top-0 shadow-md z- bg-[#070707]">
+    <div className="w-full flex items-center justify-between px-8 pt-2 sticky top-0 shadow-md z- bg-[#070707] h-[70px]">
       {/* LOGO */}
       <Link to="/" className="hidden sm:flex items-center gap-2">
         <img src="/logo.png" alt="Logo" className="w-50 h-18" />
