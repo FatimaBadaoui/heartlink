@@ -1,5 +1,6 @@
 import { Outlet } from "react-router";
 import Navbar from "./Navbar";
+import BottomBar from "./BottomBar.jsx";
 
 const Layout = () => {
   return (
@@ -8,6 +9,7 @@ const Layout = () => {
       <main className="py-10 px-6">
         <Outlet />
       </main>
+      <BottomBar />
     </div>
   );
 };
