@@ -6,8 +6,6 @@ import connectDB from "./config/connectDB.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-console.log(PORT);
-
 // CONNECT TO DATABASE
 await connectDB();
 
