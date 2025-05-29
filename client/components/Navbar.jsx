@@ -4,10 +4,13 @@ import { Link } from "react-router";
 
 const Navbar = () => {
   return (
-    <div className="w-full flex items-center justify-between px-8 pt-2 sticky top-0 shadow-md z- bg-[#070707] h-[70px]">
+    <div className="w-full flex items-center justify-between px-8 py-2 sticky top-0 shadow-md z- bg-[#070707] h-[70px]">
       {/* LOGO */}
-      <Link to="/" className="hidden sm:flex items-center gap-2">
-        <img src="/logo.png" alt="Logo" className="w-50 h-18" />
+      <Link to="/" className="hidden sm:block">
+        <img src="/logo.png" alt="Logo" className="w-50 h-16" />
+      </Link>
+      <Link to="/" className="sm:hidden">
+        <img src="/logo-sm.png" alt="Logo" className="w-10 h-8" />
       </Link>
       {/* SEARCH */}
       <div className="w-[80%] mx-auto sm:w-[320px] flex items-center justify-between gap-2 bg-[#fefefe50] rounded-lg px-2 py-1">
