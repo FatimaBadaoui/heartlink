@@ -26,13 +26,13 @@ const Menu = () => {
         <FaUserFriends className="text-2xl text-gray-300" />
         <p className="max-[500px]:hidden">My Friends</p>
       </Link>
-      <Link
+{/*       <Link
         to="edit-user"
         className="flex items-center gap-4 w-full px-4 py-2 cursor-pointer hover:bg-[#ffffff3c] rounded-md ease-in-out duration-300"
       >
         <FaUserEdit className="text-2xl text-gray-300" />
         <p className="max-[500px]:hidden">Edit Profile</p>
-      </Link>
+      </Link> */}
     </>
   );
 };
