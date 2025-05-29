@@ -4,7 +4,7 @@ import Layout from "../components/Layout";
 import Home from "../pages/Home";
 import AddPost from "../pages/Addpost.jsx";
 import PostsLiked from "../pages/PostsLiked.jsx";
-
+import Friends from "../pages/Friends.jsx";
 
 function App() {
   return (
@@ -14,10 +14,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/create-post" element={<AddPost />} />
           <Route path="/liked-posts" element={<PostsLiked />} />
+          <Route path="/friends" element={<Friends />} />
         </Route>
-        {/*         <Route path="/addpost" element={<Addpost />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/user/:id" element={<UserProfile />} /> */}
       </Routes>
     </>
   );
