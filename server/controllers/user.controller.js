@@ -66,4 +66,64 @@ const login = asyncHandler(async (req, res) => {
   });
 });
 
-export { signup, login };
+const updateUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const { firstName, lastName, avatar, password } = req.body;
+
+  // Find user by ID
+  const user = await User.findOne({ _id: userId });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  // If password is provided, hash it
+  if (password) {
+    user.password = await bcrypt.hash(password, 10);
+  }
+
+  console.log(firstName, lastName, avatar);
+
+  // Update user details
+  user.firstName = firstName || user.firstName;
+  user.lastName = lastName || user.lastName;
+  user.avatar = avatar || user.avatar;
+  await user.save();
+  res.status(200).json({
+    message: "User updated successfully",
+    user,
+  });
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  // Find user by ID
+  const user = await User.findOne({ _id: userId });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  // Delete user
+  await User.deleteOne({ _id: userId });
+  res.status(200).json({
+    message: "User deleted successfully",
+  });
+});
+
+const getUser = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+
+  // Find user by ID
+  const user = await User.findOne({ _id: userId });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  // send response
+  res.status(200).json({
+    message: "User retrieved successfully",
+    user,
+  });
+});
+
+export { signup, login, updateUser, deleteUser, getUser };

@@ -40,14 +40,6 @@ const userSchema = new Schema(
         ref: "User",
       },
     ],
-    followers: {
-      type: Number,
-      default: 0,
-    },
-    following: {
-      type: Number,
-      default: 0,
-    },
   },
   {
     timestamps: true,
