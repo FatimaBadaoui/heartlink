@@ -49,7 +49,7 @@ const login = asyncHandler(async (req, res) => {
   }
 
   // Generate JWT token
-  const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1h" });
+  const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
 
   // create cookie
   const cookieOptions = {
