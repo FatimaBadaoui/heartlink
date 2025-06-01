@@ -24,9 +24,22 @@ const addPost = asyncHandler(async (req, res) => {
 });
 
 const getPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find()
+  let posts = await Post.find()
     .populate("author", "firstName lastName avatar")
     .sort({ createdAt: -1 });
+
+  // queries
+  const { search } = req.query;
+  if (search) {
+    posts = posts.filter((post) => {
+      const fullName = `${post.author.firstName} ${post.author.lastName}`;
+      return (
+        fullName.toLowerCase().includes(search.toLowerCase()) ||
+        post.content.toLowerCase().includes(search.toLowerCase())
+      );
+    });
+  }
+
   if (!posts || posts.length === 0) {
     res.status(404);
     throw new Error("No posts found");
@@ -37,4 +50,34 @@ const getPosts = asyncHandler(async (req, res) => {
   });
 });
 
-export { addPost, getPosts };
+const updatePost = asyncHandler(async (req, res) => {
+  const { postId } = req.params;
+  const { content, image } = req.body;
+
+  const updatedPost = await Post.findByIdAndUpdate(
+    postId,
+    { content, image },
+    { new: true }
+  );
+
+  res.status(200).json({
+    message: "Post updated successfully",
+    data: updatedPost,
+  });
+});
+
+const deletePost = asyncHandler(async (req, res) => {
+  const { postId } = req.params;
+
+  const deletedPost = await Post.findByIdAndDelete(postId);
+  if (!deletedPost) {
+    res.status(404);
+    throw new Error("Post not found");
+  }
+  res.status(200).json({
+    message: "Post deleted successfully",
+    data: deletedPost,
+  });
+});
+
+export { addPost, getPosts, updatePost, deletePost };
