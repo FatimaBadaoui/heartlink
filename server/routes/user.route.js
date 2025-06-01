@@ -6,6 +6,7 @@ import {
   signup,
   updateUser,
 } from "../controllers/user.controller.js";
+import { userValidationRules, validate } from "../middleware/userValidation.js";
 
 const router = Router();
 
@@ -13,7 +14,7 @@ const router = Router();
 router.get("/", (req, res) => {
   res.send("User route is working");
 });
-router.post("/signup", signup);
+router.post("/signup", userValidationRules(), validate, signup);
 router.post("/login", login);
 router.put("/:userId", updateUser);
 router.delete("/:userId", deleteUser);
