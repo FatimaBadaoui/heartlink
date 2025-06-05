@@ -68,15 +68,12 @@ const updatePost = asyncHandler(async (req, res) => {
 
 const deletePost = asyncHandler(async (req, res) => {
   const { postId } = req.params;
+  console.log("postId", postId);
 
-  const deletedPost = await Post.findByIdAndDelete(postId);
-  if (!deletedPost) {
-    res.status(404);
-    throw new Error("Post not found");
-  }
+  await Post.findByIdAndDelete(postId);
+
   res.status(200).json({
     message: "Post deleted successfully",
-    data: deletedPost,
   });
 });
 
