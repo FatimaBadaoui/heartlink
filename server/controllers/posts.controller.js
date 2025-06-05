@@ -1,5 +1,7 @@
+import mongoose from "mongoose";
 import asyncHandler from "../config/asyncHandler.js";
 import Post from "../models/Post.js";
+import User from "../models/User.js";
 
 const addPost = asyncHandler(async (req, res) => {
   const { content, image } = req.body;
@@ -15,6 +17,11 @@ const addPost = asyncHandler(async (req, res) => {
     content,
     image,
     author,
+  });
+
+  // add post ID to the author's posts array
+  await User.findByIdAndUpdate(author, {
+    $push: { posts: newPost._id },
   });
 
   res.status(201).json({
@@ -68,8 +75,21 @@ const updatePost = asyncHandler(async (req, res) => {
 
 const deletePost = asyncHandler(async (req, res) => {
   const { postId } = req.params;
-  console.log("postId", postId);
+  const { userId } = req;
 
+  // find the post to ensure it exists
+  const post = await Post.findById(postId);
+  if (!post) {
+    res.status(404);
+    throw new Error("Post not found");
+  }
+
+  // delete post from the author's posts array
+  await User.findByIdAndUpdate(userId, {
+    $pull: { posts: new mongoose.Types.ObjectId(postId) }, // Ensure postId is an ObjectId
+  });
+
+  // delete the post
   await Post.findByIdAndDelete(postId);
 
   res.status(200).json({
