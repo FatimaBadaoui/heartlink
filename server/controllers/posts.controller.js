@@ -97,4 +97,63 @@ const deletePost = asyncHandler(async (req, res) => {
   });
 });
 
-export { addPost, getPosts, updatePost, deletePost };
+const likePost = asyncHandler(async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.userId;
+
+  // Check if the post exists
+  const post = await Post.findById(postId);
+  if (!post) {
+    res.status(404);
+    throw new Error("Post not found");
+  }
+
+  const user = await User.findById(userId);
+  // Check if the user has already liked the post
+  if (user.postsLiked.includes(postId)) {
+    res.status(400);
+    throw new Error("You have already liked this post");
+  }
+  // Add the post ID to the user's liked posts array
+  await User.findByIdAndUpdate(userId, {
+    $addToSet: { postsLiked: postId }, // Use $addToSet to avoid duplicates
+  });
+
+  // Increment the likes count on the post
+  post.likes++;
+  await post.save();
+  res.status(200).json({
+    message: "Post liked successfully",
+    data: post,
+  });
+});
+
+const dislikePost = asyncHandler(async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.userId;
+  // Check if the post exists
+  const post = await Post.findById(postId);
+  if (!post) {
+    res.status(404);
+    throw new Error("Post not found");
+  }
+  const user = await User.findById(userId);
+  // Check if the user has liked the post
+  if (!user.postsLiked.includes(postId)) {
+    res.status(400);
+    throw new Error("You have not liked this post yet");
+  }
+  // Remove the post ID from the user's liked posts array
+  await User.findByIdAndUpdate(userId, {
+    $pull: { postsLiked: postId },
+  });
+  // Decrement the likes count on the post
+  post.likes--;
+  await post.save();
+  res.status(200).json({
+    message: "Post disliked successfully",
+    data: post,
+  });
+});
+
+export { addPost, getPosts, updatePost, deletePost, likePost, dislikePost };
