@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
 
-app.use("/api/users", isAuth, userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/posts", isAuth, postsRoutes);
 
 // ERROR HANDLING MIDDLEWARE

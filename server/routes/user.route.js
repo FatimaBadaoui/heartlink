@@ -9,6 +9,7 @@ import {
   updateUser,
 } from "../controllers/user.controller.js";
 import { userValidationRules, validate } from "../middleware/userValidation.js";
+import isAuth from "../middleware/isAuth.js";
 
 const router = Router();
 
@@ -18,10 +19,10 @@ router.get("/", (req, res) => {
 });
 router.post("/signup", userValidationRules(), validate, signup);
 router.post("/login", login);
-router.put("/", updateUser);
-router.delete("/", deleteUser);
-router.get("/:userId", getUser);
-router.patch("/acceptFriend/:friendId", acceptFriendRequest);
-router.patch("/requestFriend/:friendId", requestFriend);
+router.put("/", isAuth, updateUser);
+router.delete("/", isAuth, deleteUser);
+router.get("/:userId", isAuth, getUser);
+router.patch("/acceptFriend/:friendId", isAuth, acceptFriendRequest);
+router.patch("/requestFriend/:friendId", isAuth, requestFriend);
 
 export default router;

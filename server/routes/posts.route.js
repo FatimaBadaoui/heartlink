@@ -7,11 +7,12 @@ import {
   likePost,
   updatePost,
 } from "../controllers/posts.controller.js";
+import upload from "../middleware/upload.js";
 
 const router = Router();
 
 router.get("/", getPosts);
-router.post("/", addPost);
+router.post("/", upload.single("image"), addPost);
 router.put("/:postId", updatePost);
 router.delete("/:postId", deletePost);
 
