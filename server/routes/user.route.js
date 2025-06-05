@@ -1,8 +1,10 @@
 import { Router } from "express";
 import {
+  acceptFriendRequest,
   deleteUser,
   getUser,
   login,
+  requestFriend,
   signup,
   updateUser,
 } from "../controllers/user.controller.js";
@@ -16,8 +18,10 @@ router.get("/", (req, res) => {
 });
 router.post("/signup", userValidationRules(), validate, signup);
 router.post("/login", login);
-router.put("/:userId", updateUser);
-router.delete("/:userId", deleteUser);
+router.put("/", updateUser);
+router.delete("/", deleteUser);
 router.get("/:userId", getUser);
+router.patch("/acceptFriend/:friendId", acceptFriendRequest);
+router.patch("/requestFriend/:friendId", requestFriend);
 
 export default router;

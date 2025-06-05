@@ -67,7 +67,7 @@ const login = asyncHandler(async (req, res) => {
 });
 
 const updateUser = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
+  const { userId } = req;
   const { firstName, lastName, avatar, password } = req.body;
 
   // Find user by ID
@@ -95,7 +95,7 @@ const updateUser = asyncHandler(async (req, res) => {
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
-  const { userId } = req.params;
+  const { userId } = req;
 
   // Find user by ID
   const user = await User.findOne({ _id: userId });
@@ -126,4 +126,75 @@ const getUser = asyncHandler(async (req, res) => {
   });
 });
 
-export { signup, login, updateUser, deleteUser, getUser };
+const acceptFriendRequest = asyncHandler(async (req, res) => {
+  const { userId } = req;
+  const { friendId } = req.params;
+
+  // Find user by ID
+  const user = await User.findOne({ _id: userId });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  // Find friend by ID
+  const friend = await User.findOne({ _id: friendId });
+  if (!friend) {
+    return res.status(404).json({ message: "Friend not found" });
+  }
+  // Check if friend request exists
+  if (!user.friendRequests.includes(friendId)) {
+    return res.status(400).json({ message: "Friend request not found" });
+  }
+  // Add friend to user's friends list
+  user.friends.push(friendId);
+  // Remove friend from user's friend requests
+  user.friendRequests = user.friendRequests.filter(
+    (id) => id.toString() !== friendId
+  );
+  await user.save();
+  // Add user to friend's friends list
+  friend.friends.push(userId);
+  await friend.save();
+  res.status(200).json({
+    message: "Friend request accepted",
+    user,
+    friend,
+  });
+});
+
+const requestFriend = asyncHandler(async (req, res) => {
+  const { userId } = req;
+  const { friendId } = req.params;
+
+  // Find user by ID
+  const user = await User.findOne({ _id: userId });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  // Find friend by ID
+  const friend = await User.findOne({ _id: friendId });
+  if (!friend) {
+    return res.status(404).json({ message: "Friend not found" });
+  }
+  // Check if friend request already exists
+  if (user.friendRequests.includes(friendId)) {
+    return res.status(400).json({ message: "Friend request already sent" });
+  }
+  // Add friend to user's friend requests
+  user.friendRequests.push(friendId);
+  await user.save();
+  res.status(200).json({
+    message: "Friend request sent",
+    user,
+    friend,
+  });
+});
+
+export {
+  signup,
+  login,
+  updateUser,
+  deleteUser,
+  getUser,
+  acceptFriendRequest,
+  requestFriend,
+};
