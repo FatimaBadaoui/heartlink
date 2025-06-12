@@ -1,24 +1,42 @@
 import mongoose from "mongoose";
 import asyncHandler from "../config/asyncHandler.js";
+import cloudinary from "../utils/cloudinary.js";
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 
 const addPost = asyncHandler(async (req, res) => {
-  const { content } = req.body;
-  const image = req.file ? req.file.path : null; // get image path from the uploaded file
+  const { content, image } = req.body;
+  // const image = req.file ? req.file.path : null; // get image path from the uploaded file
 
-  console.log("Image path:", image); 
+  console.log("Image path:", image);
   // get author from the request object, assuming it's set by an authentication middleware
   const author = req.userId;
-  
+
   // Validate that content and author are provided
   if (!content || !author) {
     res.status(400);
     throw new Error("Content and author are required");
   }
+
+  // If an image is provided, upload it to Cloudinary
+  let imageUrl = null;
+  if (image) {
+    try {
+      const uploadResult = await cloudinary.uploader.upload(image, {
+        folder: "posts", // specify the folder in Cloudinary
+      });
+      imageUrl = uploadResult.secure_url; // get the secure URL of the uploaded image
+      console.log("Image uploaded to Cloudinary:", imageUrl);
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+      res.status(500);
+      throw new Error("Failed to upload image to Cloudinary");
+    }
+  }
+
   const newPost = await Post.create({
     content,
-    image,
+    image: imageUrl, // use the uploaded image URL
     author,
   });
 
