@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { useAuth } from "../context/AuthContext.jsx";
 
 const Signup = () => {
@@ -10,8 +10,9 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { signup } = useAuth();
-  const navigate = useNavigate();
+  const { signup, errors } = useAuth();
+
+  console.log("Signup errors:", errors);
 
   return (
     <div className="w-full h-screen flex flex-col gap-12 items-center justify-center">
@@ -27,6 +28,17 @@ const Signup = () => {
           autoFocus
           required
         />
+        {errors.length > 0 && (
+          <div className="text-center">
+            <ul className="text-red-500">
+              {errors.map((error, index) => {
+                if (error.username) {
+                  return <li key={index}>{error.username}</li>;
+                }
+              })}
+            </ul>
+          </div>
+        )}
         <input
           type="text"
           placeholder="first name"
@@ -36,6 +48,17 @@ const Signup = () => {
           autoComplete="given-name"
           required
         />
+        {errors.length > 0 && (
+          <div className="text-center">
+            <ul className="text-red-500">
+              {errors.map((error, index) => {
+                if (error.firstName) {
+                  return <li key={index}>{error.firstName}</li>;
+                }
+              })}
+            </ul>
+          </div>
+        )}
 
         <input
           type="text"
@@ -46,6 +69,17 @@ const Signup = () => {
           autoComplete="family-name"
           required
         />
+        {errors.length > 0 && (
+          <div className="text-center">
+            <ul className="text-red-500">
+              {errors.map((error, index) => {
+                if (error.lastName) {
+                  return <li key={index}>{error.lastName}</li>;
+                }
+              })}
+            </ul>
+          </div>
+        )}
 
         <div className="border border-gray-300 p-2 rounded flex items-center justify-between">
           <input
@@ -69,16 +103,27 @@ const Signup = () => {
             />
           )}
         </div>
+        {errors.length > 0 && (
+          <div className="text-center">
+            <ul className="text-red-500">
+              {errors.map((error, index) => {
+                if (error.password) {
+                  return <li key={index}>{error.password}</li>;
+                }
+              })}
+            </ul>
+          </div>
+        )}
+
         <button
           type="submit"
           className="bg-white text-black rounded py-1 cursor-pointer hover:bg-purple-400 transition-colors duration-300"
           onClick={(e) => {
             e.preventDefault();
             signup(username, firstName, lastName, password);
-            navigate("/");
           }}
         >
-          Login
+          Sign Up
         </button>
       </form>
 

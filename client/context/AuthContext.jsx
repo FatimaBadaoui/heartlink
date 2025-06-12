@@ -1,11 +1,14 @@
 import { createContext, useContext, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [errors, setErrors] = useState([]);
 
+  const navigate = useNavigate();
 
   const login = async (username, password) => {
     try {
@@ -22,6 +25,11 @@ export const AuthProvider = ({ children }) => {
       console.log("Login successful:", userData);
     } catch (error) {
       console.error("Login failed:", error);
+      if (error.response && error.response.data) {
+        setErrors(error.response.data.errors || [error.response.data.message]);
+      } else {
+        setErrors(["An unexpected error occurred."]);
+      }
     }
   };
 
@@ -40,8 +48,14 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
       console.log("Signup successful:", userData);
+      navigate("/login");
     } catch (error) {
       console.error("Signup failed:", error);
+      if (error.response && error.response.data) {
+        setErrors(error.response.data.errors || [error.response.data.message]);
+      } else {
+        setErrors(["An unexpected error occurred."]);
+      }
     }
   };
 
@@ -52,7 +66,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, errors }}>
       {children}
     </AuthContext.Provider>
   );

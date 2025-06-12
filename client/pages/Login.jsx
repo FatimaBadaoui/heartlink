@@ -8,13 +8,22 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { login } = useAuth();
+  const { login, errors } = useAuth();
   const navigate = useNavigate();
 
   return (
     <div className="w-full h-screen flex flex-col gap-12 items-center justify-center">
       <h1 className="text-4xl">Login</h1>
       <form className="flex flex-col gap-4 sm:w-80 md:w-96 mt-4">
+        {errors.length > 0 && (
+          <div className="mt-4 text-center">
+            <ul className="text-red-500">
+              {errors.map((error, index) => (
+                <li key={index}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <input
           type="text"
           placeholder="username"

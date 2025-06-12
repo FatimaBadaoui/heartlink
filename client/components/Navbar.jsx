@@ -1,10 +1,14 @@
 import { Fragment, useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { BsPersonCircle } from "react-icons/bs";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <div className="w-full flex items-center justify-between px-8 py-2 sticky top-0 shadow-md z- bg-[#070707] h-[70px]">
@@ -64,6 +68,9 @@ const Navbar = () => {
                 onClick={() => {
                   // Handle logout logic here
                   console.log("Logout clicked");
+                  setIsOpen(false);
+                  logout();
+                  navigate("/login");
                 }}
                 className="block px-4 py-1.5 mt-2 bg-red-400 w-full hover:bg-red-600 duration-300 ease-in-out cursor-pointer rounded"
               >
