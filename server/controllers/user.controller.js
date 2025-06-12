@@ -3,6 +3,7 @@ import asyncHandler from "../config/asyncHandler.js";
 
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import cloudinary from "../utils/cloudinary.js";
 
 const { JWT_SECRET } = process.env;
 
@@ -81,12 +82,22 @@ const updateUser = asyncHandler(async (req, res) => {
     user.password = await bcrypt.hash(password, 10);
   }
 
-  console.log(firstName, lastName, avatar);
+  // upload avatar if provided to cloudinary
+  if (avatar) {
+    try {
+      const uploadResult = await cloudinary.uploader.upload(avatar, {
+        folder: "avatars", // specify the folder in Cloudinary
+      });
+      user.avatar = uploadResult.secure_url; // get the secure URL of the uploaded image
+    } catch (error) {
+      console.error("Error uploading avatar to Cloudinary:", error);
+      return res.status(500).json({ message: "Failed to upload avatar" });
+    }
+  }
 
   // Update user details
   user.firstName = firstName || user.firstName;
   user.lastName = lastName || user.lastName;
-  user.avatar = avatar || user.avatar;
   await user.save();
   res.status(200).json({
     message: "User updated successfully",
