@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -6,13 +6,6 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // check if user is logged in from the cookie
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   const login = async (username, password) => {
     try {
@@ -23,7 +16,7 @@ export const AuthProvider = ({ children }) => {
           password,
         }
       );
-      const userData = response.data;
+      const userData = response.data.user;
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
       console.log("Login successful:", userData);
@@ -43,7 +36,7 @@ export const AuthProvider = ({ children }) => {
           password,
         }
       );
-      const userData = response.data;
+      const userData = response.data.user;
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
       console.log("Signup successful:", userData);
