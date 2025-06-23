@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BsEye, BsEyeSlash } from "react-icons/bs";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { useAuth } from "../context/AuthContext.jsx";
 
 const Login = () => {
@@ -9,7 +9,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const { login, errors } = useAuth();
-  const navigate = useNavigate();
 
   return (
     <div className="w-full h-screen flex flex-col gap-12 items-center justify-center">
@@ -63,7 +62,6 @@ const Login = () => {
           onClick={(e) => {
             e.preventDefault();
             login(username, password);
-            navigate("/");
           }}
         >
           Login

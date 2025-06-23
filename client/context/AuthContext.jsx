@@ -11,6 +11,10 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const login = async (username, password) => {
+    if (!username || !password) {
+      setErrors(["Username and password are required."]);
+      return;
+    }
     try {
       const response = await axios.post(
         "http://localhost:5000/api/users/login",
@@ -23,6 +27,7 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
       console.log("Login successful:", userData);
+      navigate("/");
     } catch (error) {
       console.error("Login failed:", error);
       if (error.response && error.response.data) {
