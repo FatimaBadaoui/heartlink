@@ -13,10 +13,16 @@ const PORT = process.env.PORT || 3000;
 // CONNECT TO DATABASE
 await connectDB();
 
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+// allow cross-origin requests with credentials
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    credentials: true, // allow cookies to be sent
+  })
+);
 
 // ROUTES
 app.get("/", (req, res) => {
@@ -24,7 +30,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
-app.use("/api/posts", isAuth, postsRoutes);
+app.use("/api/posts", postsRoutes);
 
 // ERROR HANDLING MIDDLEWARE
 app.use(notFound);

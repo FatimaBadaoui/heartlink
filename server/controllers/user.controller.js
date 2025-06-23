@@ -56,6 +56,7 @@ const login = asyncHandler(async (req, res) => {
   const cookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+    sameSite: "lax", // Prevent CSRF attacks
     expires: new Date(Date.now() + 3600000), // 1 hour
   };
   res.cookie("token", token, cookieOptions);

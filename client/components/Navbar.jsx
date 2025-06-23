@@ -7,8 +7,10 @@ import { useAuth } from "../context/AuthContext.jsx";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
+
+  console.log("user in navbar", user);
 
   return (
     <div className="w-full flex items-center justify-between px-8 py-2 sticky top-0 shadow-md z- bg-[#070707] h-[70px]">
@@ -35,12 +37,11 @@ const Navbar = () => {
         className="flex items-center gap-2"
         onClick={() => setIsOpen((prev) => !prev)}
       >
-        {/* <img
-            src="/user.png"
-            alt="User"
-            className="w-10 h-10 rounded-full object-cover"
-          /> */}
-        <BsPersonCircle className="text-4xl text-gray-300 cursor-pointer hover:scale-[0.8] ease-in-out duration-300" />
+        <img
+          src={user?.avatar || "/default-avatar.png"}
+          alt="User"
+          className="w-10 h-10 rounded-full object-cover cursor-pointer hover:scale-[0.8] ease-in-out duration-300"
+        />
       </Link>
 
       {/* DROPDOWN MENU */}

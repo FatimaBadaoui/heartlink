@@ -1,6 +1,7 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import serverUrl from "../urls.js";
 
 const AuthContext = createContext();
 
@@ -10,19 +11,27 @@ export const AuthProvider = ({ children }) => {
 
   const navigate = useNavigate();
 
+  // Check if user is already logged in
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+      console.log("User loaded from localStorage:", JSON.parse(storedUser));
+    } else {
+      console.log("No user found in localStorage.");
+    }
+  }, []);
+
   const login = async (username, password) => {
     if (!username || !password) {
       setErrors(["Username and password are required."]);
       return;
     }
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/users/login",
-        {
-          username,
-          password,
-        }
-      );
+      const response = await axios.post(`${serverUrl}/api/users/login`, {
+        username,
+        password,
+      });
       const userData = response.data.user;
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
@@ -40,15 +49,12 @@ export const AuthProvider = ({ children }) => {
 
   const signup = async (username, firstName, lastName, password) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/users/signup",
-        {
-          username,
-          firstName,
-          lastName,
-          password,
-        }
-      );
+      const response = await axios.post(`${serverUrl}/api/users/signup`, {
+        username,
+        firstName,
+        lastName,
+        password,
+      });
       const userData = response.data.user;
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
@@ -65,8 +71,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    setUser(null);
     localStorage.removeItem("user");
+    setUser(null);
     console.log("User logged out");
   };
 
