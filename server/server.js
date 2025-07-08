@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
-app.use("/api/posts", postsRoutes);
+app.use("/api/posts", isAuth, postsRoutes);
 
 // ERROR HANDLING MIDDLEWARE
 app.use(notFound);

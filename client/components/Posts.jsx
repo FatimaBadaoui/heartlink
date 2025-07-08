@@ -6,12 +6,12 @@ const Posts = ({ title, posts }) => {
   const [postLiked, setPostLiked] = useState(false);
 
   return (
-    <div className="flex-1 px-4">
+    <div className="flex-1 px-4 py-8 mx-auto max-w-3xl">
       <h1 className="text-3xl font-bold mb-8">{title}</h1>
       {/* POSTS */}
       <div className="flex flex-col gap-8 mt-4">
         {posts.map((post, index) => (
-          <div key={index} className="p-4 rounded-lg shadow-md">
+          <div key={index} className="p-4 rounded-lg shadow-md max-w-[600px]">
             <div className="flex items-center gap-2">
               {post.author.avatar ? (
                 <img
@@ -27,7 +27,7 @@ const Posts = ({ title, posts }) => {
               </h2>
             </div>
             <p className="my-2">{post.content}</p>
-            <div className="w-full max-h-[400px] overflow-hidden rounded-lg">
+            <div className="w-full overflow-hidden rounded-lg">
               <img
                 src={post.image}
                 alt={post.content}

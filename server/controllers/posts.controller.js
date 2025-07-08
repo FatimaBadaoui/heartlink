@@ -8,9 +8,10 @@ const addPost = asyncHandler(async (req, res) => {
   const { content, image } = req.body;
   // const image = req.file ? req.file.path : null; // get image path from the uploaded file
 
-  console.log("Image path:", image);
   // get author from the request object, assuming it's set by an authentication middleware
   const author = req.userId;
+
+  console.log("Author ID:", author);
 
   // Validate that content and author are provided
   if (!content || !author) {

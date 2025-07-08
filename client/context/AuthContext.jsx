@@ -28,10 +28,19 @@ export const AuthProvider = ({ children }) => {
       return;
     }
     try {
-      const response = await axios.post(`${serverUrl}/api/users/login`, {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        `${serverUrl}/api/users/login`,
+        {
+          username,
+          password,
+        },
+        {
+          withCredentials: true, // Required for cookie-based authentication
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       const userData = response.data.user;
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));
