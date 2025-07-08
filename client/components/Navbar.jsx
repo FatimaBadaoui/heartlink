@@ -32,8 +32,7 @@ const Navbar = () => {
       </div>
       {/* USER */}
 
-      <Link
-        to="/"
+      <button
         className="flex items-center gap-2"
         onClick={() => setIsOpen((prev) => !prev)}
       >
@@ -42,7 +41,7 @@ const Navbar = () => {
           alt="User"
           className="w-10 h-10 rounded-full object-cover cursor-pointer hover:scale-[0.8] ease-in-out duration-300"
         />
-      </Link>
+      </button>
 
       {/* DROPDOWN MENU */}
       {isOpen && (
@@ -52,6 +51,7 @@ const Navbar = () => {
               <Link
                 to="/user-profile"
                 className="block px-4 py-2 hover:bg-white/10 duration-300 ease-in-out rounded"
+                onClick={() => setIsOpen(false)}
               >
                 My Profile
               </Link>
@@ -60,6 +60,7 @@ const Navbar = () => {
               <Link
                 to="/edit-profile"
                 className="block px-4 py-2 hover:bg-white/10 duration-300 ease-in-out rounded"
+                onClick={() => setIsOpen(false)}
               >
                 Edit Profile
               </Link>

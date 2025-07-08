@@ -1,0 +1,108 @@
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext.jsx";
+import { BsEye, BsEyeSlash } from "react-icons/bs";
+
+const EditProfile = () => {
+  const { user } = useAuth();
+  console.log("user in EditProfile:", user);
+  const [firstName, setFirstName] = useState(user.firstName);
+  const [lastName, setLastName] = useState(user.lastName);
+  const [avatar, setAvatar] = useState(user.avatar);
+  const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+
+  return (
+    <div className="w-full mx-auto p-4 max-w-3xl">
+      <h1 className="text-3xl font-bold mb-15">Edit Profile</h1>
+      <div className="flex flex-col md:flex-row items-center justify-between w-full">
+        <div className="flex flex-col gap-2 w-[30%] p-4 items-center">
+          <img
+            src={avatar}
+            alt="user avatar"
+            className="object-cover rounded-full h-52 w-52 mb-4"
+          />
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            id="file-input"
+            onChange={(e) => setAvatar(URL.createObjectURL(e.target.files[0]))}
+          />
+          <label
+            htmlFor="file-input"
+            className="cursor-pointer hover:underline hover:underline-offset-2 transition duration-300"
+          >
+            Edit Image
+          </label>
+        </div>
+        <div className="flex flex-col gap-4 w-[60%] p-4">
+          <input
+            type="text"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            placeholder="First Name"
+            className="p-2 border border-gray-300 rounded"
+          />
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            placeholder="Last Name"
+            className="p-2 border border-gray-300 rounded"
+          />
+          <div className="border border-gray-300 p-2 rounded flex items-center justify-between">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="New Password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              className="w-full h-full bg-transparent outline-none"
+              autoComplete="current-password"
+              required
+            />
+            {showPassword ? (
+              <BsEyeSlash
+                className="cursor-pointer"
+                onClick={() => setShowPassword(false)}
+              />
+            ) : (
+              <BsEye
+                className="cursor-pointer"
+                onClick={() => setShowPassword(true)}
+              />
+            )}
+          </div>
+          <div className="border border-gray-300 p-2 rounded flex items-center justify-between">
+            <input
+              type={showRepeatPassword ? "text" : "password"}
+              placeholder="Repeat Password"
+              onChange={(e) => setRepeatPassword(e.target.value)}
+              value={repeatPassword}
+              className="w-full h-full bg-transparent outline-none"
+              autoComplete="current-password"
+              required
+            />
+            {showRepeatPassword ? (
+              <BsEyeSlash
+                className="cursor-pointer"
+                onClick={() => setShowRepeatPassword(false)}
+              />
+            ) : (
+              <BsEye
+                className="cursor-pointer"
+                onClick={() => setShowRepeatPassword(true)}
+              />
+            )}
+          </div>
+          <button className="bg-white text-black rounded py-1 cursor-pointer hover:bg-purple-400 transition-colors duration-300">
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EditProfile;
