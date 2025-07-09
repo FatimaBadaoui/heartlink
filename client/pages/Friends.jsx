@@ -1,4 +1,5 @@
 import { useAuth } from "../context/AuthContext";
+import { Link } from "react-router";
 import axios from "axios";
 import serverUrl from "../urls.js";
 import { useEffect, useState } from "react";
@@ -38,7 +39,8 @@ const Friends = () => {
       <h1 className="text-3xl font-bold mb-8">My Friends</h1>
       <div className="flex flex-col gap-8 mt-4">
         {friendsList.map((friend) => (
-          <div
+          <Link
+            to={`/profile/${friend._id}`}
             key={friend._id}
             className="p-4 rounded-lg shadow-md flex justify-between items-center"
           >
@@ -55,7 +57,7 @@ const Friends = () => {
             <button className="bg-[#f834b6] px-6 py-2 rounded-lg cursor-pointer hover:bg-[#9c529c] transition duration-300 ease-in-out">
               Unfollow
             </button>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
