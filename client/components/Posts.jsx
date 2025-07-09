@@ -72,6 +72,15 @@ const Posts = ({ title, posts }) => {
     }
   };
 
+  if (!posts || posts.length === 0) {
+    return (
+      <div className="flex-1 px-4 py-8 mx-auto max-w-3xl">
+        <h1 className="text-3xl font-bold mb-8">{title}</h1>
+        <p className="text-gray-500">No posts available.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 px-4 py-8 mx-auto max-w-3xl">
       <h1 className="text-3xl font-bold mb-8">{title}</h1>

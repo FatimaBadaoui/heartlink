@@ -49,11 +49,11 @@ const Navbar = () => {
           <ul className="space-y-2">
             <li>
               <Link
-                to="/user-profile"
+                to="/my-posts"
                 className="block px-4 py-2 hover:bg-white/10 duration-300 ease-in-out rounded"
                 onClick={() => setIsOpen(false)}
               >
-                My Profile
+                My Posts
               </Link>
             </li>
             <li>
