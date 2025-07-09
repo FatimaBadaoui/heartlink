@@ -6,9 +6,6 @@ import serverUrl from "../urls.js";
 
 const Posts = ({ title, posts }) => {
   const { user, updateLocalUser } = useAuth();
-  console.log("user in posts", user.postsLiked);
-
-  console.log("Posts:", posts);
 
   const handleLikePost = async (postId) => {
     // Check if the user has already liked the post

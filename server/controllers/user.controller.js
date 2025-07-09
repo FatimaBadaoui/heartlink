@@ -141,9 +141,11 @@ const getUser = asyncHandler(async (req, res) => {
   });
 });
 
-const acceptFriendRequest = asyncHandler(async (req, res) => {
+const FollowUser = asyncHandler(async (req, res) => {
   const { userId } = req;
   const { friendId } = req.params;
+
+  console.log("Accept Friend Request");
 
   // Find user by ID
   const user = await User.findOne({ _id: userId });
@@ -155,50 +157,16 @@ const acceptFriendRequest = asyncHandler(async (req, res) => {
   if (!friend) {
     return res.status(404).json({ message: "Friend not found" });
   }
-  // Check if friend request exists
-  if (!user.friendRequests.includes(friendId)) {
-    return res.status(400).json({ message: "Friend request not found" });
+  // Check if friend exists in user's friends list
+  if (!user.friends.includes(friendId)) {
+    return res.status(400).json({ message: "User is already a Friend" });
   }
   // Add friend to user's friends list
   user.friends.push(friendId);
-  // Remove friend from user's friend requests
-  user.friendRequests = user.friendRequests.filter(
-    (id) => id.toString() !== friendId
-  );
   await user.save();
-  // Add user to friend's friends list
-  friend.friends.push(userId);
-  await friend.save();
+
   res.status(200).json({
     message: "Friend request accepted",
-    user,
-    friend,
-  });
-});
-
-const requestFriend = asyncHandler(async (req, res) => {
-  const { userId } = req;
-  const { friendId } = req.params;
-
-  // Find user by ID
-  const user = await User.findOne({ _id: userId });
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
-  // Find friend by ID
-  const friend = await User.findOne({ _id: friendId });
-  if (!friend) {
-    return res.status(404).json({ message: "Friend not found" });
-  }
-  // Check if friend request already exists
-  if (user.friendRequests.includes(friendId)) {
-    return res.status(400).json({ message: "Friend request already sent" });
-  }
-  // Add friend to user's friend requests
-  user.friendRequests.push(friendId);
-  await user.save();
-  res.status(200).json({
-    message: "Friend request sent",
     user,
     friend,
   });
@@ -227,9 +195,6 @@ const removeFriend = asyncHandler(async (req, res) => {
   // Remove friend from user's friends list
   user.friends = user.friends.filter((id) => id.toString() !== friendId);
   await user.save();
-  // Remove user from friend's friends list
-  friend.friends = friend.friends.filter((id) => id.toString() !== userId);
-  await friend.save();
   res.status(200).json({
     message: "Friend removed successfully",
     user,
@@ -274,8 +239,7 @@ export {
   updateUser,
   deleteUser,
   getUser,
-  acceptFriendRequest,
-  requestFriend,
+  FollowUser,
   removeFriend,
   getMe,
   getAllUsers,

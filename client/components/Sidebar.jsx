@@ -34,7 +34,7 @@ const Sidebar = () => {
   const filteredUsers = allUsers.filter(
     (u) =>
       u._id !== user?._id &&
-      !user?.friends.some((friend) => friend._id === u._id)
+      !user?.friends.filter((friend) => friend._id !== u._id)
   );
 
   return (

@@ -1,13 +1,12 @@
 import { Router } from "express";
 import {
-  acceptFriendRequest,
   deleteUser,
+  FollowUser,
   getAllUsers,
   getMe,
   getUser,
   login,
   removeFriend,
-  requestFriend,
   signup,
   updateUser,
 } from "../controllers/user.controller.js";
@@ -25,9 +24,8 @@ router.post("/login", login);
 router.put("/", isAuth, updateUser);
 router.delete("/", isAuth, deleteUser);
 router.get("/:userId", isAuth, getUser);
-router.patch("/acceptFriend/:friendId", isAuth, acceptFriendRequest);
-router.patch("/requestFriend/:friendId", isAuth, requestFriend);
-router.delete("/removeFriend/:friendId", isAuth, removeFriend);
+router.patch("/followUser/:friendId", isAuth, FollowUser);
+router.patch("/unfollowUser/:friendId", isAuth, removeFriend);
 
 router.get("/me", isAuth, getMe);
 

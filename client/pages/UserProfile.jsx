@@ -4,12 +4,14 @@ import { useParams } from "react-router";
 import axios from "axios";
 import serverUrl from "../urls.js";
 import Posts from "../components/Posts.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 const UserProfile = () => {
   // get user id from URL params
   const { userId } = useParams();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
+  const { user: userData } = useAuth();
 
   // fetch user data
   useEffect(() => {
@@ -44,7 +46,30 @@ const UserProfile = () => {
     }
   }, [userId]);
 
-  console.log("user data:", user);
+  // handle friend request actions
+  const handleFriendAction = async () => {
+    try {
+      const action = userData?.friends.includes(userId)
+        ? "unfollowUser"
+        : "followUser";
+      await axios.patch(
+        `${serverUrl}/api/users/${action}/${userId}`,
+        {},
+        { withCredentials: true }
+      );
+      // Update the user data after the action
+      setUser((prevUser) => ({
+        ...prevUser,
+        friends: prevUser.friends.includes(userId)
+          ? prevUser.friends.filter((id) => id !== userId)
+          : [...prevUser.friends, userId],
+      }));
+      // reload page to reflect changes
+      window.location.reload();
+    } catch (error) {
+      console.error("Error handling friend action:", error);
+    }
+  };
 
   return (
     <div className="flex-1 px-4 mx-auto max-w-3xl">
@@ -59,8 +84,11 @@ const UserProfile = () => {
         <h1 className="text-2xl font-semibold">
           {user?.firstName} {user?.lastName}
         </h1>
-        <button className="bg-[#f834b6] px-6 py-2 rounded-lg cursor-pointer hover:bg-[#ff00ff] transition duration-300 ease-in-out">
-          Follow
+        <button
+          onClick={handleFriendAction}
+          className="bg-[#f834b6] px-6 py-2 rounded-lg cursor-pointer hover:bg-[#ff00ff] transition duration-300 ease-in-out"
+        >
+          {userData?.friends.includes(userId) ? "Unfollow" : "Follow"}
         </button>
       </div>
       <Posts title={`${user?.firstName}'s Posts`} posts={posts} />
