@@ -30,7 +30,12 @@ const Sidebar = () => {
     fetchAllUsers();
   }, []);
 
-  console.log("All users:", allUsers);
+  // Filter out the current user from the suggestions or the user's friends
+  const filteredUsers = allUsers.filter(
+    (u) =>
+      u._id !== user?._id &&
+      !user?.friends.some((friend) => friend._id === u._id)
+  );
 
   return (
     <div className="hidden md:flex w-[250px] flex-col gap-4">
@@ -67,7 +72,7 @@ const Sidebar = () => {
       {/* SUGGESTIONS */}
       <div className="flex flex-col gap-2 p-4 w-full">
         <p className="font-semibold mb-4 text-lg">Suggested Friends</p>
-        {allUsers.map((user) => (
+        {filteredUsers.map((user) => (
           <Link
             to={`/profile/${user._id}`}
             key={user._id}
