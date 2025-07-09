@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   acceptFriendRequest,
   deleteUser,
+  getMe,
   getUser,
   login,
   requestFriend,
@@ -24,5 +25,7 @@ router.delete("/", isAuth, deleteUser);
 router.get("/:userId", isAuth, getUser);
 router.patch("/acceptFriend/:friendId", isAuth, acceptFriendRequest);
 router.patch("/requestFriend/:friendId", isAuth, requestFriend);
+
+router.get("/me", isAuth, getMe);
 
 export default router;

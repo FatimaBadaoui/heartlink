@@ -13,12 +13,23 @@ export const AuthProvider = ({ children }) => {
 
   // Check if user is already logged in
   useEffect(() => {
+    // Fetch current user on mount
+    const fetchCurrentUser = async () => {
+      try {
+        const res = await axios.get(`${serverUrl}/api/users/me`, {
+          withCredentials: true,
+        });
+        setUser(res.data.user);
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
-      console.log("User loaded from localStorage:", JSON.parse(storedUser));
-    } else {
-      console.log("No user found in localStorage.");
+      fetchCurrentUser(); // ⬅️ Fetch fresh data from server
     }
   }, []);
 
@@ -86,7 +97,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, login, signup, logout, errors }}>
+    <AuthContext.Provider
+      value={{ user, setUser, login, signup, logout, errors }}
+    >
       {children}
     </AuthContext.Provider>
   );

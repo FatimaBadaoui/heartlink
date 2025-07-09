@@ -204,6 +204,21 @@ const requestFriend = asyncHandler(async (req, res) => {
   });
 });
 
+const getMe = asyncHandler(async (req, res) => {
+  const { userId } = req;
+
+  // Find user by ID
+  const user = await User.findOne({ _id: userId });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  // send response
+  res.status(200).json({
+    message: "User retrieved successfully",
+    user,
+  });
+});
+
 export {
   signup,
   login,
@@ -212,4 +227,5 @@ export {
   getUser,
   acceptFriendRequest,
   requestFriend,
+  getMe,
 };
