@@ -1,4 +1,4 @@
-import { BsPersonCircle } from "react-icons/bs";
+import { MdDelete } from "react-icons/md";
 import { FaHeart, FaRegHeart, FaRegCommentDots } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext.jsx";
 import axios from "axios";
@@ -47,6 +47,29 @@ const Posts = ({ title, posts }) => {
     }
   };
 
+  const handleDeletePost = async (postId) => {
+    // have the user consent to delete the post
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this post?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      await axios.delete(`${serverUrl}/api/posts/${postId}`, {
+        withCredentials: true,
+      });
+      // Optionally, you can update the posts state to remove the deleted post
+      setUser((prevUser) => ({
+        ...prevUser,
+        posts: prevUser.posts.filter((post) => post._id !== postId),
+      }));
+      // refresh page
+      window.location.reload();
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
+
   return (
     <div className="flex-1 px-4 py-8 mx-auto max-w-3xl">
       <h1 className="text-3xl font-bold mb-8">{title}</h1>
@@ -57,6 +80,14 @@ const Posts = ({ title, posts }) => {
             key={post._id || index}
             className="p-4 rounded-lg shadow-md max-w-[600px] bg-[#c6bcc217]"
           >
+            {/* DELETE POST */}
+            {user._id === post.author?._id && (
+              <div className="flex items-center justify-end">
+                <button onClick={() => handleDeletePost(post._id)}>
+                  <MdDelete className="text-2xl text-red-500 cursor-pointer hover:scale-125 transition duration-300 ease-in-out" />
+                </button>
+              </div>
+            )}
             <div className="flex items-center gap-2">
               <img
                 src={

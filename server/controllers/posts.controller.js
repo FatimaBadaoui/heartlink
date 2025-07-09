@@ -79,6 +79,22 @@ const getPosts = asyncHandler(async (req, res) => {
   });
 });
 
+const getPostsById = asyncHandler(async (req, res) => {
+  const { postId } = req.params;
+  const post = await Post.findById(postId).populate(
+    "author",
+    "firstName lastName avatar"
+  );
+  if (!post) {
+    res.status(404);
+    throw new Error("Post not found");
+  }
+  res.status(200).json({
+    message: "Post retrieved successfully",
+    data: post,
+  });
+});
+
 const updatePost = asyncHandler(async (req, res) => {
   const { postId } = req.params;
   const { content, image } = req.body;
@@ -178,4 +194,4 @@ const dislikePost = asyncHandler(async (req, res) => {
   });
 });
 
-export { addPost, getPosts, updatePost, deletePost, likePost, dislikePost };
+export { addPost, getPosts, getPostsById, updatePost, deletePost, likePost, dislikePost };
