@@ -95,6 +95,23 @@ const getPostsById = asyncHandler(async (req, res) => {
   });
 });
 
+const getPostsByUserId = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const posts = await Post.find({ author: userId })
+    .populate("author", "firstName lastName avatar")
+    .sort({ createdAt: -1 });
+
+  if (!posts || posts.length === 0) {
+    res.status(404);
+    throw new Error("No posts found for this user");
+  }
+
+  res.status(200).json({
+    message: "Posts retrieved successfully",
+    data: posts,
+  });
+});
+
 const updatePost = asyncHandler(async (req, res) => {
   const { postId } = req.params;
   const { content, image } = req.body;
@@ -194,4 +211,13 @@ const dislikePost = asyncHandler(async (req, res) => {
   });
 });
 
-export { addPost, getPosts, getPostsById, updatePost, deletePost, likePost, dislikePost };
+export {
+  addPost,
+  getPosts,
+  getPostsById,
+  getPostsByUserId,
+  updatePost,
+  deletePost,
+  likePost,
+  dislikePost,
+};

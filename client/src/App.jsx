@@ -11,6 +11,7 @@ import PostsLiked from "../pages/PostsLiked.jsx";
 import Friends from "../pages/Friends.jsx";
 import EditProfile from "../pages/EditProfile.jsx";
 import MyPosts from "../pages/MyPosts.jsx";
+import UserProfile from "../pages/UserProfile.jsx";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path="/friends" element={<Friends />} />
           <Route path="/my-posts" element={<MyPosts />} />
           <Route path="/edit-profile" element={<EditProfile />} />
+          <Route path="/profile/:userId" element={<UserProfile />} />
         </Route>
       </Routes>
     </AuthProvider>
