@@ -25,7 +25,7 @@ const userSchema = new Schema(
     },
     avatar: {
       type: String,
-      default: "/logo-sm.png", // Default avatar image
+      default: "/default-avatar.png", // Default avatar image
     },
     posts: [],
     postsLiked: [],

@@ -69,8 +69,11 @@ const login = asyncHandler(async (req, res) => {
 });
 
 const updateUser = asyncHandler(async (req, res) => {
+  console.log("Update User");
   const { userId } = req;
   const { firstName, lastName, avatar, password } = req.body;
+
+  console.log("Fist Name:", firstName);
 
   // Find user by ID
   const user = await User.findOne({ _id: userId });

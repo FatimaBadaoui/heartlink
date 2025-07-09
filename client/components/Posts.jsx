@@ -13,15 +13,16 @@ const Posts = ({ title, posts }) => {
         {posts.map((post, index) => (
           <div key={index} className="p-4 rounded-lg shadow-md max-w-[600px]">
             <div className="flex items-center gap-2">
-              {post.author.avatar ? (
-                <img
-                  src={post.author.avatar}
-                  alt={post.author.lastName}
-                  className="w-10 h-10 rounded-full object-cover"
-                />
-              ) : (
-                <BsPersonCircle className="w-10 h-10 text-gray-500" />
-              )}
+              <img
+                src={
+                  post.author?.avatar
+                    ? post.author.avatar
+                    : "/default-avatar.png"
+                }
+                alt={post.author?.lastName}
+                className="w-10 h-10 rounded-full object-cover"
+              />
+
               <h2 className="text-l font-semibold">
                 {post.author?.firstName} {post.author?.lastName}
               </h2>

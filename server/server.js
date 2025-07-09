@@ -13,16 +13,16 @@ const PORT = process.env.PORT || 3000;
 // CONNECT TO DATABASE
 await connectDB();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 // allow cross-origin requests with credentials
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true, // allow cookies to be sent
   })
 );
+app.use(express.json({ limit: "10mb" })); // increase the limit for JSON payloads
+app.use(express.urlencoded({ extended: true, limit: "10mb" })); // increase the limit for URL-encoded payloads
+app.use(cookieParser());
 
 // ROUTES
 app.get("/", (req, res) => {

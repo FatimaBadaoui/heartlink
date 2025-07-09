@@ -6,11 +6,13 @@ import serverUrl from "../urls.js";
 import { useNavigate } from "react-router";
 
 const EditProfile = () => {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
   const [avatar, setAvatar] = useState(user.avatar);
-  const [avatarShown, setAvatarShown] = useState(user.avatar);
+  const [avatarShown, setAvatarShown] = useState(
+    user.avatar || "/default-avatar.png"
+  );
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -48,7 +50,7 @@ const EditProfile = () => {
             password,
           },
           {
-            withCredentials: true,
+            withCredentials: true, // ⬅️ Required for sending cookies
             headers: {
               "Content-Type": "application/json",
             },
@@ -70,6 +72,13 @@ const EditProfile = () => {
           }
         );
       }
+      // update user in context
+      setUser((prevUser) => ({
+        ...prevUser,
+        firstName,
+        lastName,
+        avatar: base64Image,
+      }));
       navigate("/");
     } catch (error) {
       console.error("Error updating profile:", error);
