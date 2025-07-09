@@ -5,7 +5,7 @@ import axios from "axios";
 import serverUrl from "../urls.js";
 
 const Posts = ({ title, posts }) => {
-  const { user, setUser } = useAuth();
+  const { user, updateLocalUser } = useAuth();
   console.log("user in posts", user.postsLiked);
 
   console.log("Posts:", posts);
@@ -23,10 +23,11 @@ const Posts = ({ title, posts }) => {
           }
         );
         // Update the local state to reflect the change
-        setUser((prevUser) => ({
-          ...prevUser,
-          postsLiked: prevUser.postsLiked.filter((id) => id !== postId),
-        }));
+        const updatedUser = {
+          ...user,
+          postsLiked: user.postsLiked.filter((id) => id !== postId),
+        };
+        updateLocalUser(updatedUser);
       } else {
         // if not liked, add the like
         await axios.put(
@@ -37,10 +38,11 @@ const Posts = ({ title, posts }) => {
           }
         );
         // Update the local state to reflect the change
-        setUser((prevUser) => ({
-          ...prevUser,
-          postsLiked: [...prevUser.postsLiked, postId],
-        }));
+        const updatedUser = {
+          ...user,
+          postsLiked: [...user.postsLiked, postId],
+        };
+        updateLocalUser(updatedUser);
       }
     } catch (error) {
       console.error("Error liking post:", error);
