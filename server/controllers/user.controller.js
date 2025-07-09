@@ -204,6 +204,39 @@ const requestFriend = asyncHandler(async (req, res) => {
   });
 });
 
+const removeFriend = asyncHandler(async (req, res) => {
+  const { userId } = req;
+  const { friendId } = req.params;
+
+  // Find user by ID
+  const user = await User.findOne({ _id: userId });
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  // Find friend by ID
+  const friend = await User.findOne({ _id: friendId });
+  if (!friend) {
+    return res.status(404).json({ message: "Friend not found" });
+  }
+  // Check if friend exists in user's friends list
+  if (!user.friends.includes(friendId)) {
+    return res
+      .status(400)
+      .json({ message: "Friend not found in your friends list" });
+  }
+  // Remove friend from user's friends list
+  user.friends = user.friends.filter((id) => id.toString() !== friendId);
+  await user.save();
+  // Remove user from friend's friends list
+  friend.friends = friend.friends.filter((id) => id.toString() !== userId);
+  await friend.save();
+  res.status(200).json({
+    message: "Friend removed successfully",
+    user,
+    friend,
+  });
+});
+
 const getMe = asyncHandler(async (req, res) => {
   const { userId } = req;
 
@@ -243,6 +276,7 @@ export {
   getUser,
   acceptFriendRequest,
   requestFriend,
+  removeFriend,
   getMe,
   getAllUsers,
 };

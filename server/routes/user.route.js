@@ -6,6 +6,7 @@ import {
   getMe,
   getUser,
   login,
+  removeFriend,
   requestFriend,
   signup,
   updateUser,
@@ -14,6 +15,8 @@ import { userValidationRules, validate } from "../middleware/userValidation.js";
 import isAuth from "../middleware/isAuth.js";
 
 const router = Router();
+
+// URL: /api/users
 
 // User routes
 router.get("/", getAllUsers);
@@ -24,6 +27,7 @@ router.delete("/", isAuth, deleteUser);
 router.get("/:userId", isAuth, getUser);
 router.patch("/acceptFriend/:friendId", isAuth, acceptFriendRequest);
 router.patch("/requestFriend/:friendId", isAuth, requestFriend);
+router.delete("/removeFriend/:friendId", isAuth, removeFriend);
 
 router.get("/me", isAuth, getMe);
 
