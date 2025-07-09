@@ -1,9 +1,51 @@
-import { useState } from "react";
 import { BsPersonCircle } from "react-icons/bs";
 import { FaHeart, FaRegHeart, FaRegCommentDots } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext.jsx";
+import axios from "axios";
+import serverUrl from "../urls.js";
 
 const Posts = ({ title, posts }) => {
-  const [postLiked, setPostLiked] = useState(false);
+  const { user, setUser } = useAuth();
+  console.log("user in posts", user.postsLiked);
+
+  console.log("Posts:", posts);
+
+  const handleLikePost = async (postId) => {
+    // Check if the user has already liked the post
+    try {
+      if (user.postsLiked.includes(postId)) {
+        // if already liked, remove the like
+        await axios.put(
+          `${serverUrl}/api/posts/dislike/${postId}`,
+          {},
+          {
+            withCredentials: true,
+          }
+        );
+        // Update the local state to reflect the change
+        setUser((prevUser) => ({
+          ...prevUser,
+          postsLiked: prevUser.postsLiked.filter((id) => id !== postId),
+        }));
+      } else {
+        // if not liked, add the like
+        await axios.put(
+          `${serverUrl}/api/posts/like/${postId}`,
+          {},
+          {
+            withCredentials: true,
+          }
+        );
+        // Update the local state to reflect the change
+        setUser((prevUser) => ({
+          ...prevUser,
+          postsLiked: [...prevUser.postsLiked, postId],
+        }));
+      }
+    } catch (error) {
+      console.error("Error liking post:", error);
+    }
+  };
 
   return (
     <div className="flex-1 px-4 py-8 mx-auto max-w-3xl">
@@ -11,7 +53,10 @@ const Posts = ({ title, posts }) => {
       {/* POSTS */}
       <div className="flex flex-col gap-8 mt-4">
         {posts.map((post, index) => (
-          <div key={index} className="p-4 rounded-lg shadow-md max-w-[600px]">
+          <div
+            key={post._id || index}
+            className="p-4 rounded-lg shadow-md max-w-[600px] bg-[#c6bcc217]"
+          >
             <div className="flex items-center gap-2">
               <img
                 src={
@@ -39,9 +84,9 @@ const Posts = ({ title, posts }) => {
             <div className="flex items-center justify-end gap-10 pt-4">
               <div
                 className="flex items-center gap-2 cursor-pointer"
-                onClick={() => setPostLiked((prev) => !prev)}
+                onClick={() => handleLikePost(post._id)}
               >
-                {postLiked ? (
+                {user.postsLiked.includes(post._id) ? (
                   <FaHeart className="text-2xl text-red-500" />
                 ) : (
                   <FaRegHeart className="text-2xl text-red-500" />

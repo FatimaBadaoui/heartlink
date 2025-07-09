@@ -6,7 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 
 const AddPost = () => {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [post, setPost] = useState({
     content: "",
     image: null,
@@ -35,7 +35,7 @@ const AddPost = () => {
 
       const base64Image = await toBase64(post.image);
 
-      await axios.post(
+      const res = await axios.post(
         `${serverUrl}/api/posts`,
         {
           content: post.content,
@@ -49,7 +49,14 @@ const AddPost = () => {
         }
       );
 
+      // Update user posts with the new post ID
+      const newPost = res.data.data;
+      setUser((prevUser) => ({
+        ...prevUser,
+        posts: [...prevUser.posts, newPost._id],
+      }));
       setPost({ content: "", image: null, author: user?._id || "" });
+
       navigate("/");
     } catch (error) {
       console.error("Error creating post:", error);
