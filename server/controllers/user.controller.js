@@ -219,6 +219,22 @@ const getMe = asyncHandler(async (req, res) => {
   });
 });
 
+const getAllUsers = asyncHandler(async (req, res) => {
+  // Fetch all users except the current user
+  const users = await User.find({ _id: { $ne: req.userId } }).select(
+    "-password -friendRequests"
+  );
+
+  if (!users) {
+    return res.status(404).json({ message: "No users found" });
+  }
+
+  res.status(200).json({
+    message: "Users retrieved successfully",
+    users,
+  });
+});
+
 export {
   signup,
   login,
@@ -228,4 +244,5 @@ export {
   acceptFriendRequest,
   requestFriend,
   getMe,
+  getAllUsers,
 };

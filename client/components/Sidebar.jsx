@@ -1,11 +1,36 @@
 import { Link } from "react-router";
 import Menu from "./Menu.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
+import serverUrl from "../urls.js";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const Sidebar = () => {
   const { user } = useAuth();
+  const [allUsers, setAllUsers] = useState([]);
 
-  console.log("user in sidebar", user);
+  // fetch all users
+  useEffect(() => {
+    const fetchAllUsers = async () => {
+      try {
+        const response = await axios.get(`${serverUrl}/api/users`, {
+          withCredentials: true,
+        });
+        if (response.status === 200) {
+          setAllUsers(response.data.users);
+          console.log("All users fetched:", response.data.users);
+        } else {
+          console.error("Failed to fetch users:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchAllUsers();
+  }, []);
+
+  console.log("All users:", allUsers);
 
   return (
     <div className="hidden md:flex w-[250px] flex-col gap-4">
@@ -42,38 +67,22 @@ const Sidebar = () => {
       {/* SUGGESTIONS */}
       <div className="flex flex-col gap-2 p-4 w-full">
         <p className="font-semibold mb-4 text-lg">Suggested Friends</p>
-        <div className="flex items-center gap-2 w-full cursor-pointer hover:bg-[#ffffff3c] rounded-md p-2">
-          <img
-            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="user photo"
-            className="w-10 h-10 object-cover rounded-full"
-          />
-          <p>Lilly Smith</p>
-        </div>
-        <div className="flex items-center gap-2 w-full cursor-pointer hover:bg-[#ffffff3c] rounded-md p-2">
-          <img
-            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="user photo"
-            className="w-10 h-10 object-cover rounded-full"
-          />
-          <p>Lilly Smith</p>
-        </div>
-        <div className="flex items-center gap-2 w-full cursor-pointer hover:bg-[#ffffff3c] rounded-md p-2">
-          <img
-            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="user photo"
-            className="w-10 h-10 object-cover rounded-full"
-          />
-          <p>Lilly Smith</p>
-        </div>
-        <div className="flex items-center gap-2 w-full cursor-pointer hover:bg-[#ffffff3c] rounded-md p-2">
-          <img
-            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="user photo"
-            className="w-10 h-10 object-cover rounded-full"
-          />
-          <p>Lilly Smith</p>
-        </div>
+        {allUsers.map((user) => (
+          <Link
+            to={`/profile/${user._id}`}
+            key={user._id}
+            className="flex items-center gap-2 w-full cursor-pointer hover:bg-[#ffffff3c] rounded-md p-2"
+          >
+            <img
+              src={user.avatar || "/default-avatar.png"}
+              alt="user photo"
+              className="w-10 h-10 object-cover rounded-full"
+            />
+            <p>
+              {user.firstName} {user.lastName}
+            </p>
+          </Link>
+        ))}
       </div>
     </div>
   );

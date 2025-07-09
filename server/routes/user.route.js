@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   acceptFriendRequest,
   deleteUser,
+  getAllUsers,
   getMe,
   getUser,
   login,
@@ -15,9 +16,7 @@ import isAuth from "../middleware/isAuth.js";
 const router = Router();
 
 // User routes
-router.get("/", (req, res) => {
-  res.send("User route is working");
-});
+router.get("/", getAllUsers);
 router.post("/signup", userValidationRules(), validate, signup);
 router.post("/login", login);
 router.put("/", isAuth, updateUser);
