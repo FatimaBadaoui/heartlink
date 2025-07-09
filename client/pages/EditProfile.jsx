@@ -22,66 +22,54 @@ const EditProfile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== repeatPassword) {
+
+    if (password && password !== repeatPassword) {
       alert("Passwords do not match");
       return;
     }
-    console.log("avatar:", avatar);
-    // Convert image to base64
-    const toBase64 = (file) =>
-      new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = (error) => reject(error);
+
+    try {
+      const updatedData = {};
+
+      // Only include fields that have values
+      if (firstName) updatedData.firstName = firstName;
+      if (lastName) updatedData.lastName = lastName;
+      if (password) updatedData.password = password;
+
+      // Convert avatar to base64 only if a new image is provided
+      if (avatar instanceof File) {
+        const toBase64 = (file) =>
+          new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+          });
+
+        const base64Image = await toBase64(avatar);
+        updatedData.avatar = base64Image;
+      }
+
+      // Make update request
+      const res = await axios.put(`${serverUrl}/api/users`, updatedData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
-    const base64Image = await toBase64(avatar);
-
-    console.log("base64Image:", base64Image);
-    try {
-      if (password) {
-        await axios.put(
-          `${serverUrl}/api/users`,
-          {
-            firstName,
-            lastName,
-            avatar: base64Image,
-            password,
-          },
-          {
-            withCredentials: true, // ⬅️ Required for sending cookies
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      } else {
-        await axios.put(
-          `${serverUrl}/api/users`,
-          {
-            firstName,
-            lastName,
-            avatar: base64Image,
-          },
-          {
-            withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      }
-      // update user in context
+      // Update user in context
       setUser((prevUser) => ({
         ...prevUser,
-        firstName,
-        lastName,
-        avatar: base64Image,
+        ...updatedData,
       }));
+
       navigate("/");
     } catch (error) {
-      console.error("Error updating profile:", error);
+      console.error(
+        "Error updating profile:",
+        error?.response?.data || error.message
+      );
       alert("Failed to update profile");
     }
   };
