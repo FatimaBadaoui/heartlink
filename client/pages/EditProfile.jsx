@@ -86,6 +86,22 @@ const EditProfile = () => {
     }
   };
 
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete your account?")) {
+      try {
+        await axios.delete(`${serverUrl}/api/users`, {
+          withCredentials: true, // ⬅️ Required for sending cookies
+        });
+        setUser(null); // Clear user from context
+        localStorage.removeItem("user"); // Clear user from local storage
+        navigate("/signup"); // Redirect to signup page
+      } catch (error) {
+        console.error("Error deleting account:", error);
+        alert("Failed to delete account");
+      }
+    }
+  };
+
   return (
     <div className="w-full mx-auto p-4 max-w-3xl">
       <h1 className="text-3xl font-bold mb-15">Edit Profile</h1>
@@ -177,6 +193,13 @@ const EditProfile = () => {
             onClick={handleSubmit}
           >
             Save Changes
+          </button>
+          {/* DELETE USER */}
+          <button
+            onClick={handleDelete}
+            className="bg-red-500 text-white rounded py-1 cursor-pointer hover:bg-red-600 transition-colors duration-300"
+          >
+            DELETE ACCOUNT
           </button>
         </div>
       </div>
