@@ -40,7 +40,10 @@ const Sidebar = () => {
   return (
     <div className="hidden md:flex w-[250px] flex-col gap-4">
       {/* USER */}
-      <div className="flex flex-col items-center gap-2 p-4 pb-8 w-full h-fit border-b-2 border-gray-200">
+      <Link
+        to="my-posts"
+        className="flex flex-col items-center gap-2 p-4 pb-8 w-full h-fit border-b-2 border-gray-200"
+      >
         <img
           src={user?.avatar || "/default-avatar.png"}
           alt="user photo"
@@ -64,7 +67,7 @@ const Sidebar = () => {
             <p className="font-semibold">{user?.posts.length}</p>
           </div>
         </div>
-      </div>
+      </Link>
       {/* MENU */}
       <div className="flex flex-col gap-2 p-4 w-full h-fit border-b-2 border-gray-200">
         <Menu />
