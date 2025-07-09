@@ -86,7 +86,7 @@ const UserProfile = () => {
         </h1>
         <button
           onClick={handleFriendAction}
-          className="bg-[#f834b6] px-6 py-2 rounded-lg cursor-pointer hover:bg-[#ff00ff] transition duration-300 ease-in-out"
+          className="bg-[#f834b6] px-6 py-2 rounded-lg cursor-pointer hover:bg-[#9c529c] transition duration-300 ease-in-out"
         >
           {userData?.friends.includes(userId) ? "Unfollow" : "Follow"}
         </button>
