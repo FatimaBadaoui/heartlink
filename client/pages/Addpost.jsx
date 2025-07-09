@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import serverUrl from "../urls.js";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import Loading from "../components/Loading.jsx";
 
 const AddPost = () => {
   const { user, setUser } = useAuth();
@@ -12,6 +13,7 @@ const AddPost = () => {
     image: null,
     author: user?._id || "",
   });
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -24,6 +26,7 @@ const AddPost = () => {
     }
 
     try {
+      setLoading(true);
       // Convert image to base64
       const toBase64 = (file) =>
         new Promise((resolve, reject) => {
@@ -56,7 +59,7 @@ const AddPost = () => {
         posts: [...prevUser.posts, newPost._id],
       }));
       setPost({ content: "", image: null, author: user?._id || "" });
-
+      setLoading(false);
       navigate("/");
     } catch (error) {
       console.error("Error creating post:", error);
@@ -64,8 +67,13 @@ const AddPost = () => {
         error.response?.data?.message ||
           "Something went wrong while creating the post."
       );
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="flex flex-col gap-4 h-screen w-full mx-auto p-4 max-w-3xl">
