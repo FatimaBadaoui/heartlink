@@ -3,12 +3,10 @@ import { FaHeart, FaRegHeart, FaRegCommentDots } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext.jsx";
 import axios from "axios";
 import serverUrl from "../urls.js";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 
 const Posts = ({ title, posts }) => {
   const { user, updateLocalUser } = useAuth();
-
-  const navigate = useNavigate();
 
   const handleLikePost = async (postId) => {
     // Check if the user has already liked the post

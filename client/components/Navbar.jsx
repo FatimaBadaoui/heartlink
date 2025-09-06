@@ -1,6 +1,5 @@
 import { Fragment, useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import { BsPersonCircle } from "react-icons/bs";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -26,7 +25,7 @@ const Navbar = () => {
         <input
           type="search"
           className="w-full border-none out-none focus:outline-none bg-transparent placeholder:text-gray-300"
-          placeholder="Search..."
+          placeholder="Search Post..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
