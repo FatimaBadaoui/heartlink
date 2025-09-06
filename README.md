@@ -8,32 +8,36 @@ Users can share posts, like, comment, and follow each other — keeping relation
 ## ✨ Features
 
 - 👤 **User Accounts**
-  - Create, update, and delete accounts  
-  - Follow/unfollow other users  
+
+  - Create, update, and delete accounts
+  - Follow/unfollow other users
 
 - 📝 **Posts**
-  - Create, edit, and delete posts  
-  - View posts from all users in a feed  
-  - Like and comment on posts  
+
+  - Create, edit, and delete posts
+  - View posts from all users in a feed
+  - Like and comment on posts
 
 - 🌐 **Social Interactions**
-  - Follow friends and family to see their content  
-  - Stay connected through comments and likes  
+  - Follow friends and family to see their content
+  - Stay connected through comments and likes
 
 ---
 
 ## 🛠️ Tech Stack
 
-**Frontend**  
-- ⚛️ React  
-- 🎨 Tailwind CSS  
-- ⚡ Vite  
+**Frontend**
 
-**Backend**  
-- 🟩 Node.js  
-- 🌐 Express.js  
-- 🍃 MongoDB (for database)  
-- ☁️ Cloudinary (for media storage)  
+- ⚛️ React
+- 🎨 Tailwind CSS
+- ⚡ Vite
+
+**Backend**
+
+- 🟩 Node.js
+- 🌐 Express.js
+- 🍃 MongoDB (for database)
+- ☁️ Cloudinary (for media storage)
 
 ---
 
@@ -42,6 +46,7 @@ Users can share posts, like, comment, and follow each other — keeping relation
 Follow these steps to set up HeartLink locally:
 
 ### 1. Clone the repository
+
 ```bash
 git clone https://github.com/yourusername/heartlink.git
 cd heartlink
@@ -50,18 +55,21 @@ cd heartlink
 ### 2. Install Dependencies
 
 - Frontend
+
 ```bash
 cd client
 npm install
 ```
 
 - Backend
+
 ```bash
 cd server
 npm install
 ```
 
 ### 3. Set up environment variables
+
 Create a .env file inside the server folder and add:
 
 ```
@@ -73,13 +81,16 @@ JWT_SECRET=your_jwt_secret
 ```
 
 ### 4. Run the Application
+
 - Start backend Server
+
 ```bash
 cd server
 npm run dev
 ```
 
 - Start frontend
+
 ```bash
 cd client
 npm run dev
@@ -98,14 +109,14 @@ http://localhost:5173
 ```
 heartlink/
 │
-├── client/            
+├── client/
 │   └── src/
 │       ├── components/
 │       ├── context/
 │       ├── pages/
 │       └── src/
 │
-├── server/            
+├── server/
 │   ├── models/
 │   ├── routes/
 │   ├── controllers/
@@ -120,6 +131,7 @@ heartlink/
 
 ## 💡 Future Improvements
 
+- Comments on Posts (For now it is just a placeholder)
 - Real-time notifications
 - Direct messaging
 - Light Mode
@@ -129,5 +141,3 @@ heartlink/
 ## 🤝 Contributing
 
 Contributions are welcome! Feel free to fork this repo, open an issue, or submit a pull request.
-
-
