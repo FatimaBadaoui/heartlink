@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { logout, user } = useAuth();
+  const { logout, user, query, setQuery } = useAuth();
   const navigate = useNavigate();
 
   console.log("user in navbar", user);
@@ -27,6 +27,8 @@ const Navbar = () => {
           type="search"
           className="w-full border-none out-none focus:outline-none bg-transparent placeholder:text-gray-300"
           placeholder="Search..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
         <BiSearch className="text-2xl text-gray-300  cursor-pointer hover:scale-[0.8] ease-in-out duration-300" />
       </div>

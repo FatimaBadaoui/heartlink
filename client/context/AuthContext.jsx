@@ -8,6 +8,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [errors, setErrors] = useState([]);
+  const [query, setQuery] = useState("");
 
   const navigate = useNavigate();
 
@@ -111,6 +112,8 @@ export const AuthProvider = ({ children }) => {
         logout,
         errors,
         updateLocalUser,
+        query,
+        setQuery,
       }}
     >
       {children}
