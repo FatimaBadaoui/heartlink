@@ -11,7 +11,8 @@ const UserProfile = () => {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
-  const { user: userData } = useAuth();
+  const [followed, setFollowed] = useState(false);
+  const { user: userData, setUser: setUserData } = useAuth();
 
   // fetch user data
   useEffect(() => {
@@ -21,6 +22,9 @@ const UserProfile = () => {
           withCredentials: true,
         });
         setUser(response.data.user);
+        setFollowed(
+          userData?.friends.includes(response.data.user._id) || false
+        );
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -64,8 +68,14 @@ const UserProfile = () => {
           ? prevUser.friends.filter((id) => id !== userId)
           : [...prevUser.friends, userId],
       }));
-      // reload page to reflect changes
-      window.location.reload();
+      setFollowed(!followed);
+      // Also update the context user data
+      setUserData((prevUserData) => ({
+        ...prevUserData,
+        friends: prevUserData.friends.includes(userId)
+          ? prevUserData.friends.filter((id) => id !== userId)
+          : [...prevUserData.friends, userId],
+      }));
     } catch (error) {
       console.error("Error handling friend action:", error);
     }
@@ -84,12 +94,14 @@ const UserProfile = () => {
         <h1 className="text-2xl font-semibold">
           {user?.firstName} {user?.lastName}
         </h1>
-        {userId !== userData._id && <button
-          onClick={handleFriendAction}
-          className="bg-[#f834b6] px-6 py-2 rounded-lg cursor-pointer hover:bg-[#9c529c] transition duration-300 ease-in-out"
-        >
-          {userData?.friends.includes(userId) ? "Unfollow" : "Follow"}
-        </button>}
+        {userId !== userData?._id && (
+          <button
+            onClick={handleFriendAction}
+            className="bg-[#f834b6] px-6 py-2 rounded-lg cursor-pointer hover:bg-[#9c529c] transition duration-300 ease-in-out"
+          >
+            {followed ? "Unfollow" : "Follow"}
+          </button>
+        )}
       </div>
       <Posts title={`${user?.firstName}'s Posts`} posts={posts} />
     </div>

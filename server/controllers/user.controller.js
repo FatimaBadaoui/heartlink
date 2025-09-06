@@ -157,13 +157,16 @@ const FollowUser = asyncHandler(async (req, res) => {
   if (!friend) {
     return res.status(404).json({ message: "Friend not found" });
   }
-  // Check if friend exists in user's friends list
+
+/*   // Check if friend exists in user's friends list
   if (!user.friends.includes(friendId)) {
     return res.status(400).json({ message: "User is already a Friend" });
-  }
+  } */
   // Add friend to user's friends list
   user.friends.push(friendId);
   await user.save();
+
+  console.log("user:", user);
 
   res.status(200).json({
     message: "Friend request accepted",

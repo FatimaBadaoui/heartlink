@@ -17,7 +17,12 @@ const Sidebar = () => {
           withCredentials: true,
         });
         if (response.status === 200) {
-          setAllUsers(response.data.users);
+          // filter response by removing the user Id and the frineds
+          const filteredUsers = response.data.users.filter(
+            (u) => u._id !== user._id && !user.friends.includes(u._id)
+          );
+          setAllUsers(filteredUsers);
+          // setAllUsers(response.data.users);
           console.log("All users fetched:", response.data.users);
         } else {
           console.error("Failed to fetch users:", response.statusText);
@@ -28,14 +33,7 @@ const Sidebar = () => {
     };
 
     fetchAllUsers();
-  }, []);
-
-  // Filter out the current user from the suggestions or the user's friends
-  const filteredUsers = allUsers.filter(
-    (u) =>
-      u._id !== user?._id &&
-      !user?.friends.filter((friend) => friend._id !== u._id)
-  );
+  }, [user?._id, user?.friends]);
 
   return (
     <div className="hidden md:flex w-[250px] flex-col gap-4">
@@ -75,22 +73,26 @@ const Sidebar = () => {
       {/* SUGGESTIONS */}
       <div className="flex flex-col gap-2 p-4 w-full">
         <p className="font-semibold mb-4 text-lg">Suggested Friends</p>
-        {filteredUsers.map((user) => (
-          <Link
-            to={`/profile/${user._id}`}
-            key={user._id}
-            className="flex items-center gap-2 w-full cursor-pointer hover:bg-[#ffffff3c] rounded-md p-2"
-          >
-            <img
-              src={user.avatar || "/default-avatar.png"}
-              alt="user photo"
-              className="w-10 h-10 object-cover rounded-full"
-            />
-            <p>
-              {user.firstName} {user.lastName}
-            </p>
-          </Link>
-        ))}
+        {allUsers.length > 0 ? (
+          allUsers.map((user) => (
+            <Link
+              to={`/profile/${user._id}`}
+              key={user._id}
+              className="flex items-center gap-2 w-full cursor-pointer hover:bg-[#ffffff3c] rounded-md p-2"
+            >
+              <img
+                src={user.avatar || "/default-avatar.png"}
+                alt="user photo"
+                className="w-10 h-10 object-cover rounded-full"
+              />
+              <p>
+                {user.firstName} {user.lastName}
+              </p>
+            </Link>
+          ))
+        ) : (
+          <p className="text-gray-400">No suggestions available</p>
+        )}
       </div>
     </div>
   );
