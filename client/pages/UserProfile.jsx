@@ -84,12 +84,12 @@ const UserProfile = () => {
         <h1 className="text-2xl font-semibold">
           {user?.firstName} {user?.lastName}
         </h1>
-        <button
+        {userId !== userData._id && <button
           onClick={handleFriendAction}
           className="bg-[#f834b6] px-6 py-2 rounded-lg cursor-pointer hover:bg-[#9c529c] transition duration-300 ease-in-out"
         >
           {userData?.friends.includes(userId) ? "Unfollow" : "Follow"}
-        </button>
+        </button>}
       </div>
       <Posts title={`${user?.firstName}'s Posts`} posts={posts} />
     </div>

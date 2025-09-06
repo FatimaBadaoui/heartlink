@@ -3,9 +3,12 @@ import { FaHeart, FaRegHeart, FaRegCommentDots } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext.jsx";
 import axios from "axios";
 import serverUrl from "../urls.js";
+import { Link, useNavigate } from "react-router";
 
 const Posts = ({ title, posts }) => {
   const { user, updateLocalUser } = useAuth();
+
+  const navigate = useNavigate();
 
   const handleLikePost = async (postId) => {
     // Check if the user has already liked the post
@@ -96,7 +99,10 @@ const Posts = ({ title, posts }) => {
                 </button>
               </div>
             )}
-            <div className="flex items-center gap-2">
+            <Link
+              to={`/profile/${post.author?._id}`}
+              className="flex items-center gap-2"
+            >
               <img
                 src={
                   post.author?.avatar
@@ -110,7 +116,7 @@ const Posts = ({ title, posts }) => {
               <h2 className="text-l font-semibold">
                 {post.author?.firstName} {post.author?.lastName}
               </h2>
-            </div>
+            </Link>
             <p className="my-2">{post.content}</p>
             <div className="w-full overflow-hidden rounded-lg">
               <img
